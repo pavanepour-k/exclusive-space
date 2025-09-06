@@ -1,0 +1,17 @@
+<nav class="bg-gray-800 text-white p-4 flex justify-between">
+  <div><a href="/feed" class="font-bold"><%= t('title') %></a></div>
+  <div class="flex gap-4 items-center">
+    <% if (user) { %>
+      <a href="/feed"><%= t('nav_dashboard') %></a>
+      <a href="/friends"><%= t('nav_friends') %></a>
+      <form action="/logout" method="get"><button class="underline"><%= t('logout') %></button></form>
+    <% } else { %>
+      <a href="/login"><%= t('login') %></a>
+      <a href="/register"><%= t('register') %></a>
+    <% } %>
+    <div class="flex gap-2 ml-4">
+      <a href="<%= url %>?lang=en" class="<%= lang==='en'? 'font-bold':'' %>"><%= t('english') %></a>
+      <a href="<%= url %>?lang=ja" class="<%= lang==='ja'? 'font-bold':'' %>"><%= t('japanese') %></a>
+    </div>
+  </div>
+</nav>
