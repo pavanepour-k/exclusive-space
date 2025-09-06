@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model User {
+  id           String   @id @default(cuid())
+  username     String   @unique
+  displayName  String
+  email        String   @unique
+  passwordHash String
+  avatarUrl    String?
+  language     String   @default("en")
+  createdAt    DateTime @default(now())
+
+  posts        Post[]
+  sentRequests Friendship[] @relation("sentRequests")
+  recvRequests Friendship[] @relation("recvRequests")
+  spacesA      Space[]      @relation("spacesA")
+  spacesB      Space[]      @relation("spacesB")
+  messages     Message[]    @relation("messageSender")
+  photos       Photo[]      @relation("photoUploader")
+}
+
+model Post {
+  id        String   @id @default(cuid())
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
+  content   String
+  createdAt DateTime @default(now())
+}
+
+model Friendship {
+  id           String   @id @default(cuid())
+  requesterId  String
+  requester    User     @relation("sentRequests", fields: [requesterId], references: [id])
+  addresseeId  String
+  addressee    User     @relation("recvRequests", fields: [addresseeId], references: [id])
+  status       String   // 'pending' | 'accepted' | 'blocked'
+  createdAt    DateTime @default(now())
+
+  @@unique([requesterId, addresseeId])
+}
+
+model Space {
+  id        String   @id @default(cuid())
+  userAId   String
+  userA     User     @relation("spacesA", fields: [userAId], references: [id])
+  userBId   String
+  userB     User     @relation("spacesB", fields: [userBId], references: [id])
+  status    String   @default("active")
+  createdAt DateTime @default(now())
+
+  messages  Message[]
+  photos    Photo[]
+  @@unique([userAId, userBId])
+}
+
+model Message {
+  id        String   @id @default(cuid())
+  spaceId   String
+  space     Space    @relation(fields: [spaceId], references: [id])
+  senderId  String
+  sender    User     @relation("messageSender", fields: [senderId], references: [id])
+  type      String   // 'text' | 'audio'
+  text      String?
+  audioUrl  String?
+  createdAt DateTime @default(now())
+}
+
+model Photo {
+  id         String   @id @default(cuid())
+  spaceId    String
+  space      Space    @relation(fields: [spaceId], references: [id])
+  uploaderId String
+  uploader   User     @relation("photoUploader", fields: [uploaderId], references: [id])
+  url        String
+  caption    String?
+  createdAt  DateTime @default(now())
+}
