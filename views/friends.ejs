@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body class="min-h-screen flex flex-col">
+  <%- include('partials/nav') %>
+  <main class="container mx-auto p-4 flex-1">
+    <form action="/friends/search" method="post" class="mb-4 flex gap-2">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+      <input name="q" class="border flex-1 p-2" placeholder="<%= t('search_friends') %>" />
+      <button class="bg-blue-600 text-white px-4 py-2"><%= t('search_friends') %></button>
+    </form>
+    <div>
+      <% users.forEach(u => { %>
+        <div class="border p-2 flex justify-between">
+          <span><%= u.displayName %></span>
+          <form action="/friends/request/<%= u.id %>" method="post">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+            <button class="text-blue-600 underline"><%= t('add_friend') %></button>
+          </form>
+        </div>
+      <% }) %>
+    </div>
+    <h2 class="text-xl mt-4 mb-2"><%= t('friends') %></h2>
+    <div class="space-y-2">
+      <% requests.forEach(r => { %>
+        <% const other = r.requesterId === user.id ? r.addressee : r.requester; %>
+        <% const action = r.addresseeId === user.id && r.status === 'pending'; %>
+        <div class="border p-2 flex justify-between">
+          <span><%= other.displayName %> - <%= t(r.status) %></span>
+          <% if(action){ %>
+            <form action="/friends/accept/<%= r.id %>" method="post">
+              <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
+              <button class="text-blue-600 underline"><%= t('accept') %></button>
+            </form>
+          <% } %>
+        </div>
+      <% }) %>
+    </div>
+  </main>
+</body>
+</html>

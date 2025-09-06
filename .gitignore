@@ -1,0 +1,4 @@
+node_modules
+uploads
+prisma/dev.db
+prisma/sessions.db

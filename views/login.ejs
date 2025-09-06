@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+<head>
+  <%- include('partials/head') %>
+</head>
+<body class="min-h-screen flex flex-col">
+  <%- include('partials/nav') %>
+  <main class="container mx-auto p-4 flex-1">
+    <form action="/login" method="post" class="max-w-md mx-auto space-y-4">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>"/>
+      <div>
+        <label class="block"><%= t('username_or_email') %></label>
+        <input name="username" class="border w-full p-2" required />
+      </div>
+      <div>
+        <label class="block"><%= t('password') %></label>
+        <input type="password" name="password" class="border w-full p-2" required />
+      </div>
+      <button class="bg-blue-600 text-white px-4 py-2"><%= t('login') %></button>
+    </form>
+  </main>
+</body>
+</html>
