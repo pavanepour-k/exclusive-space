@@ -5,7 +5,7 @@
 - DB/ORM: SQLite + Prisma → zero external deps, migrations included.
 - Auth: First-class “YouWare Identity” (local accounts). App routes require YouWare login.
 - Uploads: Multer to public/uploads/{audio|photos}.
-- i18n: Simple dictionaries (English/Korean) with middleware + client switcher.
+- i18n: Simple dictionaries (English/Japanese) with middleware + client switcher.
 - UX polish: micro-interactions, motion, and quality gates inspired by the UI/UX cheatsheet (focus states, reduced motion, responsive breakpoints).
 
 
